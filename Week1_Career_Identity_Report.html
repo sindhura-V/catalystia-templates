@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Week 1 – Personal Career Identity Report</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #F3F4F6;
+    color: #111827;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 2rem 1rem;
+  }
+
+  .wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* ── HEADER ── */
+  .report-header {
+    background: linear-gradient(135deg, #1E3A5F 0%, #2563EB 100%);
+    border-radius: 14px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 2rem;
+    color: white;
+  }
+  .report-header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: #BFDBFE;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 99px;
+    margin-bottom: 0.75rem;
+  }
+  .report-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+  .report-header p  { font-size: 13px; color: #BFDBFE; }
+
+  /* ── SECTION CARD ── */
+  .section {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #E5E7EB;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  .section-head {
+    background: #F9FAFB;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sec-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #D1D5DB;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: #2563EB;
+    flex-shrink: 0;
+  }
+  .sec-title { font-size: 13px; font-weight: 700; color: #111827; }
+
+  .section-body { padding: 1.5rem; }
+
+  /* ── FIELDS ── */
+  .field { margin-bottom: 1.1rem; }
+  .field:last-child { margin-bottom: 0; }
+
+  label.field-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #6B7280;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 5px;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 13.5px;
+    font-family: inherit;
+    color: #111827;
+    background: #FAFAFA;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  }
+  input[type="text"]:focus,
+  input[type="date"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: #2563EB;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+  }
+  textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
+  textarea.sm { min-height: 54px; }
+  textarea.lg { min-height: 100px; }
+  select { cursor: pointer; }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+  @media (max-width: 640px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  hr.divider { border: none; border-top: 1px solid #E5E7EB; margin: 1.25rem 0; }
+
+  /* ── PILLS ── */
+  .pill-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    border: 1px solid #D1D5DB;
+    border-radius: 99px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #374151;
+    background: white;
+    user-select: none;
+    transition: all 0.15s;
+  }
+  .pill:hover { border-color: #2563EB; color: #2563EB; background: #EFF6FF; }
+  .pill.active {
+    background: #2563EB; border-color: #2563EB;
+    color: white; font-weight: 600;
+  }
+  .pill input[type="checkbox"] { display: none; }
+
+  .add-trait-row { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+  .add-trait-row input { max-width: 200px; flex: none; }
+  .btn-add {
+    padding: 8px 16px; font-size: 13px; border-radius: 8px;
+    border: 1px solid #D1D5DB; background: #F3F4F6;
+    color: #374151; cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .btn-add:hover { background: #E5E7EB; border-color: #9CA3AF; }
+
+  /* ── TABLES ── */
+  .table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid #E5E7EB; }
+  table.form-tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.form-tbl thead tr { background: #1E3A5F; }
+  table.form-tbl th {
+    padding: 9px 12px; text-align: left;
+    font-size: 11px; font-weight: 700; color: white;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  table.form-tbl td {
+    border: 1px solid #E5E7EB;
+    padding: 0; vertical-align: top;
+  }
+  table.form-tbl tr:nth-child(even) td { background: #F9FAFB; }
+  table.form-tbl td input[type="text"],
+  table.form-tbl td textarea,
+  table.form-tbl td select {
+    border: none; border-radius: 0; background: transparent;
+    padding: 8px 10px; font-size: 13px; box-shadow: none;
+  }
+  table.form-tbl td input[type="text"]:focus,
+  table.form-tbl td textarea:focus,
+  table.form-tbl td select:focus {
+    background: #EFF6FF; box-shadow: none; border-radius: 0;
+  }
+  table.form-tbl td .skill-name {
+    padding: 10px 12px; font-weight: 600; color: #1E3A5F;
+    font-size: 13px; display: block;
+  }
+  table.form-tbl td select { width: 100%; }
+
+  /* ── NUMBERED LIST ── */
+  .num-list { display: flex; flex-direction: column; gap: 8px; }
+  .num-item { display: flex; align-items: center; gap: 10px; }
+  .num-item .num { font-size: 13px; font-weight: 700; color: #9CA3AF; min-width: 20px; }
+  .num-item input { flex: 1; }
+
+  /* ── NOTE ── */
+  .note-text { font-size: 12px; color: #9CA3AF; font-style: italic; margin-top: 8px; }
+
+  /* ── OUTPUT SECTION ── */
+  .output-section {
+    background: white;
+    border-radius: 12px;
+    border: 2px solid #93C5FD;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(37,99,235,0.1);
+  }
+  .output-head {
+    background: linear-gradient(90deg, #EFF6FF, #DBEAFE);
+    border-bottom: 1px solid #BFDBFE;
+    padding: 1rem 1.5rem;
+  }
+  .output-head .badge {
+    font-size: 11px; font-weight: 700; color: #2563EB;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .output-head h2 { font-size: 17px; font-weight: 700; color: #1E3A5F; margin-bottom: 2px; }
+  .output-head p  { font-size: 12px; color: #6B7280; }
+  .output-body { padding: 1.5rem; }
+
+  /* ── PRINT BUTTON ── */
+  .print-bar {
+    display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 1.5rem;
+  }
+  .btn-print {
+    padding: 10px 20px; font-size: 13px; font-weight: 600;
+    border-radius: 8px; border: none; cursor: pointer;
+    background: #2563EB; color: white; font-family: inherit;
+    transition: background 0.15s;
+  }
+  .btn-print:hover { background: #1D4ED8; }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .print-bar { display: none; }
+    .section, .output-section { box-shadow: none; border-radius: 0; page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- Print bar -->
+  <div class="print-bar">
+    <button class="btn-print" onclick="window.print()">🖨 Print / Save as PDF</button>
+  </div>
+
+  <!-- Header -->
+  <div class="report-header">
+    <div class="badge">Week 1 Template</div>
+    <h1>Personal Career Identity Report</h1>
+    <p>Purpose: Help the student understand who they are before choosing careers.</p>
+  </div>
+
+  <!-- ── SECTION 1 ── -->
+  <div class="section">
+    <div class="section-head"><div class="sec-num">1</div><div class="sec-title">Student Information</div></div>
+    <div class="section-body">
+      <div class="grid-3">
+        <div class="field"><label class="field-label">Student Name</label><input type="text" placeholder="Full name" /></div>
+        <div class="field"><label class="field-label">Grade / Year</label><input type="text" placeholder="e.g. Grade 10" /></div>
+        <div class="field"><label class="field-label">School</label><input type="text" placeholder="School name" /></div>
+        <div class="field"><label class="field-label">Country</label><input type="text" placeholder="Country" /></div>
+        <div class="field"><label class="field-label">Date of Session</label><input type="date" /></div>
+        <div class="field"><label class="field-label">Catalyst Name</label><input type="text" placeholder="Catalyst name" /></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2 ── -->
+  <div class="section">
+    <div class="section-head"><div class="sec-num">2</div><div class="sec-title">Initial Student Context</div></div>
+    <div class="section-body">
+      <div class="field"><label class="field-label">What career ideas did the student initially mention?</label><textarea placeholder="List initial career ideas..."></textarea></div>
+      <div class="field"><label class="field-label">What motivated them to join this program?</label><textarea placeholder="Describe the student's motivation..."></textarea></div>
+      <div class="field"><label class="field-label">What expectations did they express?</label><textarea placeholder="Note expectations shared by the student..."></textarea></div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3 ── -->
+  <div class="section">
+    <div class="section-head"><div class="sec-num">3</div><div class="sec-title">Core Values Mapping</div></div>
+    <div class="section-body">
+      <div class="table-wrap" style="margin-bottom:1.25rem;">
+        <table class="form-tbl">
+          <thead><tr><th style="width:24%">Value</th><th style="width:38%">Why it matters to the student</th><th style="width:38%">Evidence from discussion</th></tr></thead>
+          <tbody>
+            <tr><td><input type="text" placeholder="e.g. Creativity" /></td><td><textarea class="sm" placeholder="Why this value matters..."></textarea></td><td><textarea class="sm" placeholder="e.g. Robotics + video editing"></textarea></td></tr>
+            <tr><td><input type="text" placeholder="Value" /></td><td><textarea class="sm" placeholder="Why this value matters..."></textarea></td><td><textarea class="sm" placeholder="Evidence..."></textarea></td></tr>
+            <tr><td><input type="text" placeholder="Value" /></td><td><textarea class="sm" placeholder="Why this value matters..."></textarea></td><td><textarea class="sm" placeholder="Evidence..."></textarea></td></tr>
+            <tr><td><input type="text" placeholder="Value" /></td><td><textarea class="sm" placeholder="Why this value matters..."></textarea></td><td><textarea class="sm" placeholder="Evidence..."></textarea></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <label class="field-label" style="margin-bottom:8px;">Top 5 Values Guiding the Student</label>
+      <div class="num-list">
+        <div class="num-item"><span class="num">1.</span><input type="text" placeholder="Value" /></div>
+        <div class="num-item"><span class="num">2.</span><input type="text" placeholder="Value" /></div>
+        <div class="num-item"><span class="num">3.</span><input type="text" placeholder="Value" /></div>
+        <div class="num-item"><span class="num">4.</span><input type="text" placeholder="Value" /></div>
+        <div class="num-item"><span class="num">5.</span><input type="text" placeholder="Value" /></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4 ── -->
+  <div class="section">
+    <div class="section-head"><div class="sec-num">4</div><div class="sec-title">Personality & Work Style Insights</div></div>
+    <div class="section-body">
+      <div class="field"><label class="field-label">Assessment Results Summary</label><textarea placeholder="Summarise personality assessment results..."></textarea></div>
+      <hr class="divider" />
+      <label class="field-label" style="margin-bottom:8px;">Key Personality Traits <span style="color:#9CA3AF;font-weight:400;text-transform:none;letter-spacing:0">(click to select)</span></label>
+      <div class="pill-group" id="trait-pills">
+        <label class="pill" onclick="togglePill(this)"><input type="checkbox" />Analytical</label>
+        <label class="pill" onclick="togglePill(this)"><input type="checkbox" />Creative</label>
+        <label class="pill" onclick="togglePill(this)"><input type="checkbox" />Collaborative</label>
+        <label class="pill" onclick="togglePill(this)"><input type="checkbox" />Independent</label>
+        <label class="pill" onclick="togglePill(this)"><input type="checkbox" />Leadership</label>
+        <label class="pill" onclick="togglePill(this)"><input type="checkbox" />Empathetic</label>
+        <label class="pill" onclick="togglePill(this)"><input type="checkbox" />Detail-oriented</label>
+        <label class="pill" onclick="togglePill(this)"><input type="checkbox" />Strategic</label>
+      </div>
+      <div class="add-trait-row">
+        <input type="text" id="custom-trait" placeholder="Add custom trait..." />
+        <button class="btn-add" onclick="addTrait()">+ Add</button>
+      </div>
+      <hr class="divider" />
+      <div class="grid-3">
+        <div>
+          <label class="field-label" style="margin-bottom:8px;">Preferred Work Environment</label>
+          <div class="pill-group" style="flex-direction:column;gap:6px;">
+            <label class="pill" onclick="togglePill(this)" style="border-radius:8px;"><input type="checkbox" />Structured</label>
+            <label class="pill" onclick="togglePill(this)" style="border-radius:8px;"><input type="checkbox" />Flexible</label>
+            <label class="pill" onclick="togglePill(this)" style="border-radius:8px;"><input type="checkbox" />Team-based</label>
+            <label class="pill" onclick="togglePill(this)" style="border-radius:8px;"><input type="checkbox" />Independent</label>
+          </div>
+        </div>
+        <div>
+          <label class="field-label" style="margin-bottom:8px;">Learning Style</label>
+          <div class="pill-group" style="flex-direction:column;gap:6px;">
+            <label class="pill" onclick="togglePill(this)" style="border-radius:8px;"><input type="checkbox" />Visual</label>
+            <label class="pill" onclick="togglePill(this)" style="border-radius:8px;"><input type="checkbox" />Practical</label>
+            <label class="pill" onclick="togglePill(this)" style="border-radius:8px;"><input type="checkbox" />Conceptual</label>
+            <label class="pill" onclick="togglePill(this)" style="border-radius:8px;"><input type="checkbox" />Discussion-based</label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Additional Notes</label>
+          <textarea style="min-height:130px;" placeholder="Any other observations..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5 ── -->
+  <div class="section">
+    <div class="section-head"><div class="sec-num">5</div><div class="sec-title">Strength & Capability Audit</div></div>
+    <div class="section-body">
+      <div class="table-wrap">
+        <table class="form-tbl">
+          <thead><tr><th style="width:26%">Skill Area</th><th style="width:24%">Strength Level</th><th>Evidence</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="skill-name">Analytical Thinking</span></td>
+              <td><select><option value="">Select level</option><option>High</option><option>Medium</option><option>Low</option></select></td>
+              <td><textarea class="sm" placeholder="Evidence..."></textarea></td>
+            </tr>
+            <tr>
+              <td><span class="skill-name">Communication</span></td>
+              <td><select><option value="">Select level</option><option>High</option><option>Medium</option><option>Low</option></select></td>
+              <td><textarea class="sm" placeholder="Evidence..."></textarea></td>
+            </tr>
+            <tr>
+              <td><span class="skill-name">Creativity</span></td>
+              <td><select><option value="">Select level</option><option>High</option><option>Medium</option><option>Low</option></select></td>
+              <td><textarea class="sm" placeholder="Evidence..."></textarea></td>
+            </tr>
+            <tr>
+              <td><span class="skill-name">Problem Solving</span></td>
+              <td><select><option value="">Select level</option><option>High</option><option>Medium</option><option>Low</option></select></td>
+              <td><textarea class="sm" placeholder="Evidence..."></textarea></td>
+            </tr>
+            <tr>
+              <td><span class="skill-name">Leadership</span></td>
+              <td><select><option value="">Select level</option><option>High</option><option>Medium</option><option>Low</option></select></td>
+              <td><textarea class="sm" placeholder="Evidence..."></textarea></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 6 ── -->
+  <div class="section">
+    <div class="section-head"><div class="sec-num">6</div><div class="sec-title">Natural Talent Indicators</div></div>
+    <div class="section-body">
+      <label class="field-label" style="margin-bottom:8px;">Top 5 Strengths Observed</label>
+      <div class="num-list">
+        <div class="num-item"><span class="num">1.</span><input type="text" placeholder="Strength observed" /></div>
+        <div class="num-item"><span class="num">2.</span><input type="text" placeholder="Strength observed" /></div>
+        <div class="num-item"><span class="num">3.</span><input type="text" placeholder="Strength observed" /></div>
+        <div class="num-item"><span class="num">4.</span><input type="text" placeholder="Strength observed" /></div>
+        <div class="num-item"><span class="num">5.</span><input type="text" placeholder="Strength observed" /></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 7 ── -->
+  <div class="section">
+    <div class="section-head"><div class="sec-num">7</div><div class="sec-title">Academic Interests</div></div>
+    <div class="section-body">
+      <div class="grid-3">
+        <div class="field"><label class="field-label">Subjects enjoyed most</label><textarea placeholder="e.g. Maths, Art, Biology..."></textarea></div>
+        <div class="field"><label class="field-label">Subjects found challenging</label><textarea placeholder="e.g. History, Chemistry..."></textarea></div>
+        <div class="field"><label class="field-label">Subjects to explore more</label><textarea placeholder="e.g. Psychology, CS..."></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 8 ── -->
+  <div class="section">
+    <div class="section-head"><div class="sec-num">8</div><div class="sec-title">Interest Clusters</div></div>
+    <div class="section-body">
+      <div class="table-wrap">
+        <table class="form-tbl">
+          <thead><tr><th style="width:28%">Interest Area</th><th>Evidence from Discussion</th></tr></thead>
+          <tbody>
+            <tr><td><span class="skill-name">Technology</span></td><td><textarea class="sm" placeholder="Evidence..."></textarea></td></tr>
+            <tr><td><span class="skill-name">Business</span></td><td><textarea class="sm" placeholder="Evidence..."></textarea></td></tr>
+            <tr><td><span class="skill-name">Social Impact</span></td><td><textarea class="sm" placeholder="Evidence..."></textarea></td></tr>
+            <tr><td><span class="skill-name">Creative Fields</span></td><td><textarea class="sm" placeholder="Evidence..."></textarea></td></tr>
+            <tr><td><span class="skill-name">Science & Research</span></td><td><textarea class="sm" placeholder="Evidence..."></textarea></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 9 ── -->
+  <div class="section">
+    <div class="section-head"><div class="sec-num">9</div><div class="sec-title">Initial Career Hypotheses</div></div>
+    <div class="section-body">
+      <label class="field-label" style="margin-bottom:8px;">Possible fields worth exploring</label>
+      <div class="num-list">
+        <div class="num-item"><span class="num">1.</span><input type="text" placeholder="Career field or direction" /></div>
+        <div class="num-item"><span class="num">2.</span><input type="text" placeholder="Career field or direction" /></div>
+        <div class="num-item"><span class="num">3.</span><input type="text" placeholder="Career field or direction" /></div>
+        <div class="num-item"><span class="num">4.</span><input type="text" placeholder="Career field or direction" /></div>
+      </div>
+      <p class="note-text">These are exploration ideas, not final decisions.</p>
+    </div>
+  </div>
+
+  <!-- ── SECTION 10 ── -->
+  <div class="section">
+    <div class="section-head"><div class="sec-num">10</div><div class="sec-title">Week 1 Reflection Summary</div></div>
+    <div class="section-body">
+      <p style="font-size:12px;color:#9CA3AF;margin-bottom:1rem;font-style:italic;">Student reflections captured by Catalyst.</p>
+      <div class="grid-2">
+        <div class="field"><label class="field-label">What surprised the student most?</label><textarea placeholder="Student's reflection..."></textarea></div>
+        <div class="field"><label class="field-label">What excited them?</label><textarea placeholder="Student's reflection..."></textarea></div>
+        <div class="field"><label class="field-label">What confused them?</label><textarea placeholder="Student's reflection..."></textarea></div>
+        <div class="field"><label class="field-label">What questions remain?</label><textarea placeholder="Open questions to carry forward..."></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── WEEK 1 OUTPUT ── -->
+  <div class="output-section">
+    <div class="output-head">
+      <div class="badge">✦ Week 1 Output</div>
+      <h2>Personal Career Identity Profile</h2>
+      <p>Summary written by Catalyst</p>
+    </div>
+    <div class="output-body">
+      <div class="grid-2">
+        <div class="field"><label class="field-label">Core Strengths</label><textarea class="lg" placeholder="Summarise the student's core strengths identified this week..."></textarea></div>
+        <div class="field"><label class="field-label">Personal Drivers</label><textarea class="lg" placeholder="What drives and motivates this student..."></textarea></div>
+        <div class="field"><label class="field-label">Key Interests</label><textarea class="lg" placeholder="Primary interest areas identified..."></textarea></div>
+        <div class="field"><label class="field-label">Early Career Directions</label><textarea class="lg" placeholder="Possible career directions to explore further..."></textarea></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrapper -->
+
+<script>
+function togglePill(el) {
+  const cb = el.querySelector('input[type="checkbox"]');
+  setTimeout(() => {
+    el.classList.toggle('active', cb.checked);
+  }, 0);
+}
+
+function addTrait() {
+  const input = document.getElementById('custom-trait');
+  const val = input.value.trim();
+  if (!val) return;
+  const container = document.getElementById('trait-pills');
+  const lbl = document.createElement('label');
+  lbl.className = 'pill active';
+  lbl.setAttribute('onclick', 'togglePill(this)');
+  lbl.innerHTML = `<input type="checkbox" checked />${val}`;
+  container.appendChild(lbl);
+  input.value = '';
+  input.focus();
+}
+
+document.getElementById('custom-trait').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); addTrait(); }
+});
+</script>
+</body>
+</html>
